@@ -20,8 +20,8 @@ if __name__ == '__main__':
                 client_socket, client_address = server_socket.accept()
                 socket_array.append(client_socket)  # remeber all the socket
                 client_info_str = client_socket.recv(1024)
-                client_info_str = json.loads(client_info_str)
                 print(client_info_str)
+                client_info_str = json.loads(client_info_str)
                 client_info_list = client_info_str.split(" ")
                 client_ip = client_info_list[0]
                 client_port = int(client_info_list[1])
