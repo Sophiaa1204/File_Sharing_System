@@ -1,6 +1,6 @@
 import sys
 import socket
-import pickle
+import json
 import threading
 import server_connection
 import client_p2p_connection
@@ -20,7 +20,7 @@ if __name__ == '__main__':
                 client_socket, client_address = server_socket.accept()
                 socket_array.append(client_socket)  # remeber all the socket
                 client_info_str = client_socket.recv(1024)
-                client_info_str = pickle.loads(client_info_str)
+                client_info_str = json.loads(client_info_str)
                 print(client_info_str)
                 client_info_list = client_info_str.split(" ")
                 client_ip = client_info_list[0]
@@ -28,7 +28,7 @@ if __name__ == '__main__':
                 client_socket_dic.append([client_ip, client_port])
                 with lock:
                     for socket in socket_array:
-                        socket.send(pickle.dumps(client_socket_dic))
+                        socket.send(json.dumps(client_socket_dic))
                     try:
                       print("start success!!!!!!")
                       def client_handler(server_socket,client_socket):
