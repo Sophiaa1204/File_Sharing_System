@@ -48,7 +48,7 @@ def pre_process_message(server_socket,client_socket):
     message_type = message['type']
     if message_type in ['small_update', 'large_update']:
         file_data = b''
-        file_data += message['type']['file_data']
+        file_data += message['data']['file_data']
         while True:
             try:
                 serialized_message_sub = client_socket.recv(4096)
