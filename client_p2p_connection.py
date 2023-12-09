@@ -19,6 +19,7 @@ def getConnection():
     return conn_server_socket
 # Method to handle received message from the server
 def handle_received_message(message):
+    print("In handle received message!!!!!")
     if message==None:
         return
     message_type = message['type']

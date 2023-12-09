@@ -67,9 +67,9 @@ def recvall(sock, n):
     return data
 
 def pre_process_message(server_socket,client_socket):
-    TIMEOUT_DURATION = 100
+    # TIMEOUT_DURATION = 100
 
-    server_socket.settimeout(TIMEOUT_DURATION)
+    # server_socket.settimeout(TIMEOUT_DURATION)
     raw_message_length = recvall(client_socket, 4)
     if not raw_message_length:
         return None
@@ -85,6 +85,9 @@ def pre_process_message(server_socket,client_socket):
             "file_path": file_path,
             "file_data": message,
         }
+
+    print("SUCCESS!!BEFORE SENDING DATA")
+    print(message)
 
     return message
 
