@@ -76,7 +76,8 @@ def pre_process_message(server_socket,client_socket):
         return None
     message_length = struct.unpack('!I', raw_message_length)[0]
     # Read the message data based on the message length
-    message = recvall(client_socket, message_length)
+    serialized_message = recvall(client_socket, message_length)
+    message = pickle.loads(serialized_message)
     print(message)
     message_type = message['type']
     if message_type in ['small_update', 'large_update']:
