@@ -64,6 +64,7 @@ def recvall(sock, n):
         if not packet:
             return None
         data.extend(packet)
+    print("IN RECVALL!")
     return data
 
 def pre_process_message(server_socket,client_socket):

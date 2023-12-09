@@ -4,6 +4,7 @@ import threading
 from config import server_ip, server_port
 import client_change_receiver
 import client_file_monitor
+import struct
 # one thread for each pair to pair connection
 lock = threading.Lock()
 # store info about established pair connection
@@ -85,7 +86,9 @@ def send_to_server(server_socket, message_type, data):
     serialized_message = pickle.dumps(message)
     # ensure the safety of shared resources
     with lock:
-        server_socket.sendall(serialized_message)
+        message_length = struct.pack('!I', len(serialized_message))
+        server_socket.sendall(message_length + serialized_message)
+        # server_socket.sendall(serialized_message)
 
 def client_entry(server_ip,server_port,client_ip,client_port):
    try:
