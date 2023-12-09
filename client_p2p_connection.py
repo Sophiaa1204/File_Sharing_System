@@ -1,5 +1,5 @@
 import socket
-import json
+import pickle
 import threading
 from config import server_ip, server_port
 import client_change_receiver
@@ -81,7 +81,7 @@ def send_to_server(server_socket, message_type, data):
         'type': message_type,
         'data': data
     }
-    serialized_message = json.dumps(message)
+    serialized_message = pickle.dumps(message)
     # ensure the safety of shared resources
     with lock:
         server_socket.sendall(serialized_message)
@@ -102,14 +102,14 @@ def client_entry(server_ip,server_port,client_ip,client_port):
        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
        try:
            client_socket.connect((server_ip, server_port))
-           client_socket.send(json.dumps((client_ip+" "+str(client_port))))
+           client_socket.send(pickle.dumps((client_ip+" "+str(client_port))))
        except:
            print("can not connect to server")
            client_socket.close()
            exit(0)
        dumpediplist=client_socket.recv(4096)
        global neighborips
-       neighborips=json.loads(dumpediplist)
+       neighborips=pickle.loads(dumpediplist)
        print("thread start")
        connectionhandler=threading.Thread(target=handle_client_connection,args=(((server_socket,neighborips))))
        connectionhandler.start()
@@ -135,7 +135,7 @@ def pre_process_message(client_server,server_socket):
  
     server_socket.settimeout(TIMEOUT_DURATION)
     serialized_message = server_socket.recv(4096)
-    message = json.loads(serialized_message)
+    message = pickle.loads(serialized_message)
     print(message)
     if type(message)==type([]):
          connectionhandler=threading.Thread(target=handle_client_connection,args=(((client_server,message))))
@@ -148,7 +148,7 @@ def pre_process_message(client_server,server_socket):
         while True:
             try:
                 serialized_message_sub = server_socket.recv(4096)
-                message_sub = json.loads(serialized_message_sub)
+                message_sub = pickle.loads(serialized_message_sub)
                 if message_sub['data'] == b'END':
                     break
                 else:

@@ -1,7 +1,7 @@
 import socket
 import threading
 # import pickle
-import json
+import pickle
 import sys
 import server_change_receiver
 lock=threading.Lock
@@ -13,7 +13,7 @@ def send_to_client(server_socket, message_type, data):
         'type': message_type,
         'data': data
     }
-    serialized_message = json.dumps(message)
+    serialized_message = pickle.dumps(message)
     server_socket.sendall(serialized_message)
 
 def handle_client_message(message, client_socket):
@@ -43,7 +43,7 @@ def pre_process_message(server_socket,client_socket):
  
     server_socket.settimeout(TIMEOUT_DURATION)
     serialized_message = client_socket.recv(4096)
-    message = json.loads(serialized_message)
+    message = pickle.loads(serialized_message)
     print("pre called!!!!!!")
     print(message)
     message_type = message['type']
@@ -53,7 +53,7 @@ def pre_process_message(server_socket,client_socket):
         while True:
             try:
                 serialized_message_sub = client_socket.recv(4096)
-                message_sub = json.loads(serialized_message_sub)
+                message_sub = pickle.loads(serialized_message_sub)
                 if message_sub['data'] == b'END':
                     break
                 else:
